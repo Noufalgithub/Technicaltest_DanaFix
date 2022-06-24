@@ -34,7 +34,7 @@ class SearchController extends GetxController {
     refreshController.value.loadComplete();
   }
 
-  void getNewsEverything({String keyword = 'bitcoin'}) async {
+  void getNewsEverything({String keyword = 'corona'}) async {
     await SearchRepo().getNewsEverything(keyword: keyword).then((value) {
       listArticles(value.articles);
       loadingState(LoadingState.loaded);

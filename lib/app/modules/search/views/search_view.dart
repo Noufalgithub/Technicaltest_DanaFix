@@ -37,7 +37,7 @@ class SearchView extends GetWidget<SearchController> {
                       child: CircularProgressIndicator.adaptive(),
                     ),
                   )
-                : (controller.listArticles == 0)
+                : (controller.listArticles.length == 0)
                     ? const Expanded(
                         child: Center(
                           child: Text('Data Kosong!'),
@@ -54,20 +54,25 @@ class SearchView extends GetWidget<SearchController> {
                                     controller.limit.value)
                                 ? controller.limit.value
                                 : controller.listArticles.length,
-                            itemBuilder: ((context, index) => CardListWidget(
-                                  image: controller
-                                          .listArticles[index].urlToImage ??
-                                      "https://miro.medium.com/max/1150/1*mJxChu066YXfKhJoHRr0Bw.jpeg",
-                                  title: controller.listArticles[index].title ??
-                                      '-',
-                                  desc: controller
-                                          .listArticles[index].description ??
-                                      '-',
-                                  date: controller
-                                      .listArticles[index].publishedAt!, onTap: () {
-                                    Get.toNamed(Routes.NEWS_DETAIL);
-                            },
-                                )),
+                            itemBuilder: ((context, index) {
+                              var webUrl = controller.listArticles[index].url;
+                              return CardListWidget(
+                                image: controller
+                                        .listArticles[index].urlToImage ??
+                                    "https://miro.medium.com/max/1150/1*mJxChu066YXfKhJoHRr0Bw.jpeg",
+                                title:
+                                    controller.listArticles[index].title ?? '-',
+                                desc: controller
+                                        .listArticles[index].description ??
+                                    '-',
+                                date:
+                                    controller.listArticles[index].publishedAt!,
+                                onTap: () {
+                                  Get.toNamed(Routes.NEWS_DETAIL,
+                                      arguments: webUrl);
+                                },
+                              );
+                            }),
                           ),
                         ),
                       );

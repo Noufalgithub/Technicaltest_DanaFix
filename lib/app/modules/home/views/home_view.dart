@@ -49,7 +49,7 @@ class HomeView extends GetWidget<HomeController> {
                       child: CircularProgressIndicator.adaptive(),
                     ),
                   )
-                : (controller.listArticles == 0)
+                : (controller.listArticles.length == 0)
                     ? const Expanded(
                         child: Center(
                           child: Text('Data Kosong!'),
@@ -67,6 +67,7 @@ class HomeView extends GetWidget<HomeController> {
                                 ? controller.limit.value
                                 : controller.listArticles.length,
                             itemBuilder: ((context, index) {
+                              var webUrl = controller.listArticles[index].url;
                               return CardListWidget(
                                 image:
                                     controller.listArticles[index].urlToImage!,
@@ -76,7 +77,8 @@ class HomeView extends GetWidget<HomeController> {
                                 date:
                                     controller.listArticles[index].publishedAt!,
                                 onTap: () {
-                                  Get.toNamed(Routes.NEWS_DETAIL);
+                                  Get.toNamed(Routes.NEWS_DETAIL,
+                                      arguments: webUrl);
                                 },
                               );
                             }),
