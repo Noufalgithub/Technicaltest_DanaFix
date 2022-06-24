@@ -1,23 +1,23 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:technicaltest_danafix/app/data/models/home/model_topheadlines_espn.dart';
-import 'package:technicaltest_danafix/app/data/repository/home/home_repo.dart';
+import 'package:technicaltest_danafix/app/data/models/search/model_news_everything.dart';
+import 'package:technicaltest_danafix/app/data/repository/search/search_repo.dart';
 import 'package:technicaltest_danafix/app/utils/enum.dart';
-import 'package:technicaltest_danafix/app/utils/my_string.dart';
 
-class HomeController extends GetxController {
+class SearchController extends GetxController {
   Rx<LoadingState> loadingState = LoadingState.loading.obs;
   Rx<int> limit = 10.obs;
-  var listArticles = List<Articles>.empty().obs;
+  TextEditingController searchC = TextEditingController();
   Rx<RefreshController> refreshController =
       RefreshController(initialRefresh: false).obs;
-
+  var listArticles = List<Articles>.empty().obs;
 
   @override
   void onInit() {
     // TODO: implement onInit
-    getNewsTopHeadlines();
+    print('ini onInit');
+    getNewsEverything();
     super.onInit();
   }
 
@@ -34,8 +34,8 @@ class HomeController extends GetxController {
     refreshController.value.loadComplete();
   }
 
-  void getNewsTopHeadlines() async {
-    await HomeRepo().getNewsTopHeadlines().then((value) {
+  void getNewsEverything({String keyword = 'bitcoin'}) async {
+    await SearchRepo().getNewsEverything(keyword: keyword).then((value) {
       listArticles(value.articles);
       loadingState(LoadingState.loaded);
     });

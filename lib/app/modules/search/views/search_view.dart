@@ -4,44 +4,32 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:technicaltest_danafix/app/modules/widgets/card_list_widget.dart';
+import 'package:technicaltest_danafix/app/modules/widgets/search_with_back_button.dart';
 import 'package:technicaltest_danafix/app/routes/app_pages.dart';
 import 'package:technicaltest_danafix/app/utils/enum.dart';
 
-import '../controllers/home_controller.dart';
+import '../controllers/search_controller.dart';
 
-class HomeView extends GetWidget<HomeController> {
+class SearchView extends GetWidget<SearchController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'NewsReader',
-          style: GoogleFonts.abhayaLibre(
-              color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () => Get.toNamed(Routes.SEARCH),
-              icon: const Icon(Icons.search)),
-          const SizedBox(
-            width: 10,
-          )
-        ],
-      ),
-      body: Column(
+      body: SafeArea(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SearchWithBackButton(
+              onTapBackButton: () => Get.back(),
+              controller: controller,
+              searchTextEditingC: controller.searchC),
           Container(
-            margin: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+            margin: const EdgeInsets.all(20),
             child: Text(
-              'Headlines from ESPN',
+              'All News',
               style:
                   GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 15),
             ),
           ),
-
-          /// list headlines from ESPN
           Obx(() {
             return (controller.loadingState == LoadingState.loading)
                 ? const Expanded(
@@ -66,26 +54,26 @@ class HomeView extends GetWidget<HomeController> {
                                     controller.limit.value)
                                 ? controller.limit.value
                                 : controller.listArticles.length,
-                            itemBuilder: ((context, index) {
-                              return CardListWidget(
-                                image:
-                                    controller.listArticles[index].urlToImage!,
-                                title: controller.listArticles[index].title!,
-                                desc:
-                                    controller.listArticles[index].description!,
-                                date:
-                                    controller.listArticles[index].publishedAt!,
-                                onTap: () {
-                                  Get.toNamed(Routes.NEWS_DETAIL);
-                                },
-                              );
-                            }),
+                            itemBuilder: ((context, index) => CardListWidget(
+                                  image: controller
+                                          .listArticles[index].urlToImage ??
+                                      "https://miro.medium.com/max/1150/1*mJxChu066YXfKhJoHRr0Bw.jpeg",
+                                  title: controller.listArticles[index].title ??
+                                      '-',
+                                  desc: controller
+                                          .listArticles[index].description ??
+                                      '-',
+                                  date: controller
+                                      .listArticles[index].publishedAt!, onTap: () {
+                                    Get.toNamed(Routes.NEWS_DETAIL);
+                            },
+                                )),
                           ),
                         ),
                       );
           })
         ],
-      ),
+      )),
     );
   }
 }
